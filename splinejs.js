@@ -39,4 +39,29 @@
 		console.log("Spline v"+Spline.VERSION+" is working");
 	};
 	
+	/**
+	 * Create a new figure in the specified selector 
+	 */
+	Spline.newFigure = function(name, selector){
+		
+	};
+	
+	/**
+	 * Create a new figure in the specified selector
+	 * @param {String} selector
+	 */
+	Spline.figure = function(name){
+		
+	};
+	
+	/**
+	 * Plot the data 
+	 * @param {Array} x values
+	 * @param {Array} y values
+	 * @param {Object} linespec: Line parameters (Color and thickness)
+	 */
+	Spline.plot = function(x, y, linespec){
+		
+	};
+	
 }).call(this);
