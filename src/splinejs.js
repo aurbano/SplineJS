@@ -123,10 +123,14 @@
 		})
 		.y(function(d) { 
 			return y(d); 
-		});
-
+		})
+		.interpolate('linear');
 		      
-		figure.g.append("svg:path").attr("d", line(yValues)).attr("stroke", color);
+		figure.g.append("svg:path")
+			.attr("d", line(yValues))
+			.attr("stroke", color)
+			.attr("fill", 'none')
+			.attr("stroke-width", style);
 	};
 	
 	/**
