@@ -1,6 +1,8 @@
 /*!
  * SplineJS JavaScript Library v0.0.1
  * https://github.com/aurbano/SplineJS
+ * 
+ * @author Alejandro U. Alvarez <http://urbanoalvarez.es>
  *
  * Released under the MIT license
  * http://opensource.org/licenses/MIT
@@ -58,15 +60,15 @@
 	
 	/**
 	 * Create a new figure in the specified selector
-	 * @param {String} selector
+	 * @param {String} DOM selector
+	 * @param {Array} Array of values for the x axis.
+	 * @return {Object} Object containing a reference to the d3 object, the dimensions of the container and other data.
 	 */
 	Spline.figure = function(selector, xValues){
 		var w = $(selector).width(),
 			h = $(selector).height(),
 			x = d3.scale.linear().domain([d3.min(xValues), d3.max(xValues)]).range([0, w]);
 			
-		console.log([d3.min(xValues), d3.max(xValues)]);
-		
 		var graph = d3.select(selector)
 			.append("svg:svg")
 				//.attr('preserveAspectRatio','xMinYMin')
@@ -85,7 +87,6 @@
 		      .call(xAxis);
 				      
 		return {
-			name: name,
 			selector: selector,
 			w: w,
 			h: h,
@@ -94,41 +95,51 @@
 	};
 	
 	/**
-	 * Wrapper for D3js line 
-	 */
-	Spline.line = d3.svg.line()
-		.x(function(d) { return d.x; })
-        .y(function(d) { return d.y; })
-        .interpolate("linear");
-	
-	/**
 	 * Plot data into a figure.
 	 * 
+	 * @see Spline.figure
+	 * 
+	 * @param {Object} An object returned by Spline.figure()
 	 * @param {Array} x values
 	 * @param {Array} y values
-	 * @param {Object} linespec: Line parameters (Color and thickness)
+	 * @param {Int} Line thickness
+	 * @param {String} Line color in HTML format
 	 */
 	Spline.plot = function(figure, xValues, yValues, style, color){
 		// y scale
-		var y = d3.scale.linear().domain([d3.min(yValues), d3.max(yValues)]).range([figure.h, 0]);
-		
+		var x = d3.scale.linear().domain([d3.min(xValues), d3.max(xValues)]).range([0, figure.w]),
+			y = d3.scale.linear().domain([d3.min(yValues), d3.max(yValues)]).range([figure.h, 0]);
+			
 		var yAxis = d3.svg.axis().scale(y).ticks(6).orient("left");
 		// Add the y-axis to the left
 		figure.g.append("svg:g")
 		      .attr("class", "y axis")
 		      .attr("transform", "translate(-25,0)")
 		      .call(yAxis);
+		
+		var line = d3.svg.line()
+		.x(function(d,i) {
+			return x(i); 
+		})
+		.y(function(d) { 
+			return y(d); 
+		});
+
 		      
-		figure.g.append("svg:path").attr("d", Spline.line(Spline.formatData(xValues, yValues))).attr("stroke", color);
+		figure.g.append("svg:path").attr("d", line(yValues)).attr("stroke", color);
 	};
 	
 	/**
-	 * Convert data to the format expected by the plotters 
+	 * Convert data to the format expected by the plotters
+	 * If Y is larger than X only the corresponding part will be returned.
+	 * @param {Array} X values
+	 * @param {Array} Y values
+	 * @return {Array} [{x:,y:,}...] 
 	 */
 	Spline.formatData = function(x, y){
 		var ret = [];
 		for(var i=0; i<y.length; i++){
-			ret.push({x: x[i], y:y[i]});
+			ret.push({x: x(i), y:y(i)});
 		}
 		return ret;
 	};
@@ -162,7 +173,7 @@
 				// pivot for column
 				var i_max = 0; var vali = Number.NEGATIVE_INFINITY;
 				for(var i=k; i<m; i++) if(A[i][k]>vali) { i_max = i; vali = A[i][k];}
-				CSPL._gaussJ.swapRows(A, k, i_max);
+				Spline.gaussJ.swapRows(A, k, i_max);
 				
 				if(A[i_max][i] == 0) console.log("matrix is singular!");
 				
