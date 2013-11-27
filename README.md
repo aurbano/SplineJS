@@ -1,9 +1,9 @@
 SplineJS
 ========
 
-SplineJS - JavaScript library for numerical computation and data plotting.
+> SplineJS - JavaScript library for numerical computation and data plotting.
 
-Under development
+![Basin interpolation](https://raw.github.com/aurbano/SplineJS/master/img/screenshot-linear-basis.png "B-spline interpolation")
 
 ###Demo
 Test the project at http://github.urbanoalvarez.es/SplineJS/

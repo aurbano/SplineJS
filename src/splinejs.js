@@ -105,7 +105,7 @@
 	 * @param {Int} Line thickness
 	 * @param {String} Line color in HTML format
 	 */
-	Spline.plot = function(figure, xValues, yValues, style, color){
+	Spline.plot = function(figure, xValues, yValues, interpolation, color, style, width){
 		// y scale
 		var x = d3.scale.linear().domain([d3.min(xValues), d3.max(xValues)]).range([0, figure.w]),
 			y = d3.scale.linear().domain([d3.min(yValues), d3.max(yValues)]).range([figure.h, 0]);
@@ -124,13 +124,14 @@
 		.y(function(d) { 
 			return y(d); 
 		})
-		.interpolate('linear');
+		.interpolate(interpolation); // basis, step-before/after, cardinal...
 		      
 		figure.g.append("svg:path")
 			.attr("d", line(yValues))
 			.attr("stroke", color)
 			.attr("fill", 'none')
-			.attr("stroke-width", style);
+			.attr("stroke-width", width)
+			.attr("stroke-dasharray", style);
 	};
 	
 	/**
