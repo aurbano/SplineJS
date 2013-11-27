@@ -58,7 +58,12 @@
 				var graph = Spline.figure("#chart1", x);
 				Spline.plot( graph, x, data, 'linear', 'red', '1 1', 1);
 				Spline.plot( graph, x, data, 'basis', 'steelblue', '', 2);
-				Spline.table.fill('table', [x, data], 2);
+				Spline.table.fill('#table1', [x, data], 2);
+				
+				var graph = Spline.figure("#chart2", x);
+				Spline.plot( graph, x, data, 'linear', 'red', '1 1', 1);
+				Spline.plot( graph, x, data, 'cardinal', 'steelblue', '', 2);
+				Spline.table.fill('#table2', [x, data], 2);
 			});
 		</script>
 	</head>
@@ -91,14 +96,14 @@
 			</p>
 		
 			<h2>Demos</h2>
-			<h3>Simple chart</h3>
+			<h3>B-Spline <small>(d3.js built-in method)</small></h3>
 			<div class="row">
 				<div class="col-md-9">
 					<div id="chart1" class="chart" style="height: 200px"></div>
 				</div>
 				<div class="col-md-3">
 					<div class="contain" style="height:200px">
-						<table class="table table-striped table-hover table-condensed">
+						<table id="table1" class="table table-striped table-hover table-condensed">
 							<tr>
 								<th>X</th>
 								<th>Y</th>
@@ -106,6 +111,29 @@
 						</table>
 					</div>
 				</div>
+			</div>
+			<div class="row">
+				<p>This example uses d3.js' built-in interpolation and the plot function in Spline. The table is populated with the points used using Spline too.</p>
+			</div>
+			<hr />
+			<h3>Cardinal Spline <small>(d3.js built-in method)</small></h3>
+			<div class="row">
+				<div class="col-md-9">
+					<div id="chart2" class="chart" style="height: 200px"></div>
+				</div>
+				<div class="col-md-3">
+					<div class="contain" style="height:200px">
+						<table id="table2" class="table table-striped table-hover table-condensed">
+							<tr>
+								<th>X</th>
+								<th>Y</th>
+							</tr>
+						</table>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<p>This example uses d3.js' built-in interpolation and the plot function in Spline. The table is populated with the points used using Spline too.</p>
 			</div>
 			<footer>
 				<p class="muted-text credit">Developed by <a href="http://urbanoalvarez.es">Alejandro U. Álvarez</a> &bull; Released under the MIT License &bull; <a href="https://github.com/aurbano/SplineJS">GitHub</a></p>
