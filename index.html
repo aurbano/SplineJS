@@ -64,6 +64,14 @@
 				Spline.plot( graph, x, data, 'linear', 'red', '1 1', 1);
 				Spline.plot( graph, x, data, 'cardinal', 'steelblue', '', 2);
 				Spline.table.fill('#table2', [x, data], 2);
+				
+				var graph = Spline.figure("#chart3", x);
+				Spline.plot( graph, x, data, 'linear', 'red', '3 10', 3);
+				Spline.plot( graph, x, data, 'basis', 'steelblue', '', 1);
+				Spline.plot( graph, x, data, 'bundle', 'chartreuse ', '', 1);
+				Spline.plot( graph, x, data, 'cardinal', 'darkorange', '', 1);
+				Spline.plot( graph, x, data, 'monotone', 'green', '', 1);
+				Spline.table.fill('#table3', [x, data], 2);
 			});
 		</script>
 	</head>
@@ -96,6 +104,26 @@
 			</p>
 		
 			<h2>Demos</h2>
+			<h3>d3.js interpolation <small>(Overview of all methods)</small></h3>
+			<div class="row">
+				<div class="col-md-9">
+					<div id="chart3" class="chart" style="height: 300px"></div>
+				</div>
+				<div class="col-md-3">
+					<div class="contain" style="height:300px">
+						<table id="table3" class="table table-striped table-hover table-condensed">
+							<tr>
+								<th>X</th>
+								<th>Y</th>
+							</tr>
+						</table>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<p>Legend: <span style="color: red">No interpolation</span>. <span style="color: steelblue">B-Spline</span>. <span style="color: chartreuse">Bundle</span>. <span style="color: darkorange">Cardinal</span>. <span style="color: green">Monotone</span></p>
+			</div>
+			<hr />
 			<h3>B-Spline <small>(d3.js built-in method)</small></h3>
 			<div class="row">
 				<div class="col-md-9">
