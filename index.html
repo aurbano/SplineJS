@@ -55,6 +55,7 @@
 				var graph = Spline.figure("#chart1", x);
 				Spline.plot( graph, x, data, 'linear', 'red', '1 1', 1);
 				Spline.plot( graph, x, data, 'basis', 'steelblue', '', 2);
+				Spline.table.fill('table', [x, data], 2);
 			});
 		</script>
 	</head>
@@ -98,11 +99,6 @@
 							<th>X</th>
 							<th>Y</th>
 							<th>Y<small>aprox</small></th>
-						</tr>
-						<tr>
-							<td>0</td>
-							<td>0</td>
-							<td>0</td>
 						</tr>
 					</table>
 				</div>

@@ -150,6 +150,37 @@
 	};
 	
 	/**
+	 * Display data in tables 
+	 */
+	Spline.table = {
+		create : function(){},
+		/**
+		 * Fill a table with data
+		 * @param {String} DOM selector
+		 * @param {Array} Data to fill the table, in a multidimensional array, one inner array per column: [[col1 data], [col2 data]]
+		 * @param {int} Number of decimal positions for rounding. Don't specify or set to -1 to display the full number 
+		 */
+		fill : function(selector, data, round){
+			var total = data[0].length,
+				table = $(selector);
+			if(typeof(round)=='undefined'){
+				round = -1;
+			}
+			for(var i=0; i<total; i++){
+				var row = '<tr>';
+				for(var r=0; r<data.length; r++){
+					if(round>1)
+						row += '<td>'+d3.round(data[r][i],round)+'</td>';
+					else
+						row += '<td>'+data[r][i],round+'</td>';
+				}
+				row += '</tr>';
+				table.append(row);
+			}
+		}
+	};
+	
+	/**
 	 * Gauss-Jordan matrix solving
 	 * @author Ivan Kuckir <http://blog.ivank.net> 
 	 */
