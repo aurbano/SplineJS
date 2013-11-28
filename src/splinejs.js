@@ -149,6 +149,9 @@
 		return ret;
 	};
 	
+	/**
+	 * A set of interpolation functions 
+	 */
 	Spline.interpolate = {
 		/**
 		 * Calculate the Lagrange polynomials for a set of x values
@@ -169,6 +172,31 @@
 			}
 			return c;
 		}
+	};
+	
+	/**
+	 * Evaluate polynomial. It returns the value of the polynomial P evaluated
+	 * at X. P is a vector of length N+1 whose elements are the coefficients of the polynomial
+	 * in descending powers.
+	 * Example:
+	 * 	p(x) = 3x^2+2x+1 at x = 5,7, and 9:
+	 * 	p = [3, 2, 1];
+	 * 	Spline.polyval(p,[5, 7, 9]);
+	 * 
+	 * @param {Array} Coefficients of the polynomial in descending powers.
+	 * @param {Array} Values of X to evaluate
+	 * @return {Array} The corresponding Y values Y=P(X)
+	 */
+	Spline.polyval = function(P,x){
+		var y = [];
+		for(var val=0; val<x.length; val++){
+			var sum = 0;
+			for(var coef=0; coef<P.length; coef++){
+				sum += P[coef]*Math.pow(x[val], P.length-1-coef);
+			}
+			y.push(sum);
+		}
+		return y;
 	};
 	
 	/**
