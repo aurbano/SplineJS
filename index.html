@@ -54,27 +54,45 @@
 			
 			$(document).ready(function(){
 				
-				console.log(Spline.polyval([3, 2, 1],[5, 7, 9]));
-				
+				/*// d3.js interpolation
 				var data = [3, 6, 2, 7, 5, 2, 0, 3, 8, 9, 2, 5, 9, 3, 6, 3, 6, 2, 7, 5, 2, 1, 3, 8, 9, 2, 5, 9, 2, 7];
 				var x = Spline.linspace(0,30,data.length);
-				var graph = Spline.figure("#chart1", x);
-				Spline.plot( graph, x, data, 'linear', 'red', '1 1', 1);
-				Spline.plot( graph, x, data, 'basis', 'steelblue', '', 2);
-				Spline.table.fill('#table1', [x, data], 2);
-				
-				var graph = Spline.figure("#chart2", x);
-				Spline.plot( graph, x, data, 'linear', 'red', '1 1', 1);
-				Spline.plot( graph, x, data, 'cardinal', 'steelblue', '', 2);
-				Spline.table.fill('#table2', [x, data], 2);
-				
 				var graph = Spline.figure("#chart3", x);
-				Spline.plot( graph, x, data, 'linear', 'red', '3 10', 3);
-				Spline.plot( graph, x, data, 'basis', 'steelblue', '', 1);
-				Spline.plot( graph, x, data, 'bundle', 'chartreuse ', '', 1);
-				Spline.plot( graph, x, data, 'cardinal', 'darkorange', '', 1);
-				Spline.plot( graph, x, data, 'monotone', 'green', '', 1);
-				Spline.table.fill('#table3', [x, data], 2);
+                Spline.plot( graph, x, data, 'linear', 'red', '3 10', 3);
+                Spline.plot( graph, x, data, 'basis', 'steelblue', '', 1);
+                Spline.plot( graph, x, data, 'bundle', 'chartreuse ', '', 1);
+                Spline.plot( graph, x, data, 'cardinal', 'darkorange', '', 1);
+                Spline.plot( graph, x, data, 'monotone', 'green', '', 1);
+                Spline.table.fill('#table3', [x, data], 2);*/
+				
+				// Interpolation using Lagrange Polynomials
+				var X = Spline.interval(0,1,5);
+					Y = [1, 1.5, 2.4, 2, 3, 1];
+				
+				console.log(X);
+				console.log(Y);
+				
+				var l = Spline.interpolate.lagrange_polynomials(X);
+				Spline.gaussJ._debug_printMat(l);
+				
+				var pol = Spline.multiplyMatrix([Y],l)[0];
+				Spline.gaussJ._debug_printMat(pol);
+				
+				//var xx = Spline.interval(0,0.1,5);
+				var xx = [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8,0.9,1,1.1,1.2,1.3,1.4,1.5,1.6,1.7,1.8,1.9,2.0,2.1,2.2,2.3,2.4,2.5,2.6,2.7,2.8,2.9,3.0,3.1,3.2,3.3,3.4,3.5,3.6,3.7,3.8,3.9,4.0,4.1,4.2,4.3,4.4,4.5,4.6,4.7,4.8,4.9,5.0];
+				
+				console.log(xx);
+				
+				var YY = Spline.polyval(pol,xx);
+				console.log(YY);
+				
+				console.log(xx.length);
+				console.log(YY.length);
+				
+				var graph = Spline.figure("#chart1", xx);
+				Spline.plot( graph, xx, YY, 'linear', 'steelblue','', 1);
+				Spline.plot( graph, X, Y, 'linear', 'red', '1 1', 1);
+				Spline.table.fill('#table1', [X,Y, xx, YY], 3);
 			});
 		</script>
 	</head>
@@ -107,6 +125,34 @@
 			</p>
 		
 			<h2>Demos</h2>
+			<h3>Lagrange Polynomials</h3>
+			<div class="row">
+				<div class="col-md-9">
+					<div id="chart1" class="chart" style="height: 200px"></div>
+				</div>
+				<div class="col-md-3">
+					<div class="contain" style="height:200px">
+						<table id="table1" class="table table-striped table-hover table-condensed">
+							<tr>
+								<th colspan="2">Nodes</th>
+								<th colspan="2">Lagrange</th>
+							</tr>
+							<tr>
+								<th>X</th>
+								<th>Y</th>
+								<th>X</th>
+								<th>Y</th>
+							</tr>
+						</table>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<p>This example shows interpolation using the Lagrange Polynomials method.</p>
+			</div>
+			
+			<hr />
+			
 			<h3>d3.js interpolation <small>(Overview of all methods)</small></h3>
 			<div class="row">
 				<div class="col-md-9">
@@ -126,46 +172,7 @@
 			<div class="row">
 				<p>Legend: <span style="color: red">No interpolation</span>. <span style="color: steelblue">B-Spline</span>. <span style="color: chartreuse">Bundle</span>. <span style="color: darkorange">Cardinal</span>. <span style="color: green">Monotone</span></p>
 			</div>
-			<hr />
-			<h3>B-Spline <small>(d3.js built-in method)</small></h3>
-			<div class="row">
-				<div class="col-md-9">
-					<div id="chart1" class="chart" style="height: 200px"></div>
-				</div>
-				<div class="col-md-3">
-					<div class="contain" style="height:200px">
-						<table id="table1" class="table table-striped table-hover table-condensed">
-							<tr>
-								<th>X</th>
-								<th>Y</th>
-							</tr>
-						</table>
-					</div>
-				</div>
-			</div>
-			<div class="row">
-				<p>This example uses d3.js' built-in interpolation and the plot function in Spline. The table is populated with the points used using Spline too.</p>
-			</div>
-			<hr />
-			<h3>Cardinal Spline <small>(d3.js built-in method)</small></h3>
-			<div class="row">
-				<div class="col-md-9">
-					<div id="chart2" class="chart" style="height: 200px"></div>
-				</div>
-				<div class="col-md-3">
-					<div class="contain" style="height:200px">
-						<table id="table2" class="table table-striped table-hover table-condensed">
-							<tr>
-								<th>X</th>
-								<th>Y</th>
-							</tr>
-						</table>
-					</div>
-				</div>
-			</div>
-			<div class="row">
-				<p>This example uses d3.js' built-in interpolation and the plot function in Spline. The table is populated with the points used using Spline too.</p>
-			</div>
+			
 		</div>
 		<footer>
 			<p class="muted-text credit">Developed by <a href="http://urbanoalvarez.es">Alejandro U. Álvarez</a> &bull; Released under the MIT License &bull; <a href="https://github.com/aurbano/SplineJS">GitHub</a></p>

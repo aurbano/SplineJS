@@ -76,7 +76,7 @@
 				//.attr("preserveAspectRatio", "xMidYMid")
 				.attr("preserveAspectRatio", "none")
 			.append("g")
-				.attr("transform", "translate(" + 50 + "," + 10 + ")");
+				.attr("transform", "translate(" + 60 + "," + 10 + ")");
 		
 		// Create x axis
 		var xAxis = d3.svg.axis().scale(x).tickSize(-h).tickSubdivide(true);
@@ -90,7 +90,8 @@
 			selector: selector,
 			w: w,
 			h: h,
-			g: graph
+			g: graph,
+			yAxis: false
 		};
 	};
 	
@@ -111,11 +112,14 @@
 			y = d3.scale.linear().domain([d3.min(yValues), d3.max(yValues)]).range([figure.h, 0]);
 			
 		var yAxis = d3.svg.axis().scale(y).ticks(6).orient("left");
-		// Add the y-axis to the left
-		figure.g.append("svg:g")
-		      .attr("class", "y axis")
-		      .attr("transform", "translate(-25,0)")
-		      .call(yAxis);
+		if(!figure.yAxis){
+			figure.g.append("svg:g")
+				.attr("class", "y axis")
+				.attr("transform", "translate(-25,0)")
+				.call(yAxis);
+			figure.yAxis = true;
+		}
+		
 		
 		var line = d3.svg.line()
 		.x(function(d,i) {
@@ -200,6 +204,45 @@
 	};
 	
 	/**
+	 * Matrix multiplication
+	 * @param {Array} Matrix 1
+	 * @param {Array} Matrix 2
+	 * @return {Array} Result of Matrix1 x Matrix2 
+	 */
+	Spline.multiplyMatrix = function(m1, m2) {
+		if (m1[0].length != m2.length) {
+	    	throw "Error: incompatible sizes: "+m1[0].length+'x'+m2.length;
+	    }
+	 	var result = [];
+	    for (var i = 0; i < m1.length; i++) {
+	        result[i] = [];
+	        for (var j = 0; j < m2[0].length; j++) {
+	            var sum = 0;
+	            for (var k = 0; k < m1[0].length; k++) {
+	                sum += m1[i][k] * m2[k][j];
+	            }
+	            result[i][j] = sum;
+	        }
+	    }
+	    return result; 
+	};
+	
+	/**
+	 * Generate a vector from start to finish (included if multiple) with a set increment.
+	 * @param {float} Start point
+	 * @param {float} Increments
+	 * @param {float} End point
+	 * @return {Array} Vector from start to finish 
+	 */
+	Spline.interval = function(start, increment, finish){
+		var v = [];
+		for(var i=start;i<=finish;i+=increment)
+			v.push(i);
+		
+		return v;
+	};
+	
+	/**
 	 * Convolution and polynomial multiplication
 	 * The resulting vector is length Math.max(A.length + B.length -1, Math.max(A.length, B.length))
 	 * If A and B are vectors of polynomial coefficients, convolving them is equivalent to multiplying the two
@@ -259,14 +302,21 @@
 		 * @param {int} Number of decimal positions for rounding. Don't specify or set to -1 to display the full number 
 		 */
 		fill : function(selector, data, round){
-			var total = data[0].length,
-				table = $(selector);
+			var table = $(selector);
+			var total = data[0].length;
+			for(var i=0;i<data.length;i++){
+				total = Math.max(total,data[i].length);
+			}
 			if(typeof(round)=='undefined'){
 				round = -1;
 			}
 			for(var i=0; i<total; i++){
 				var row = '<tr>';
 				for(var r=0; r<data.length; r++){
+					if(typeof(data[r][i])=='undefined'){
+						row += '<td></td>';
+						continue;
+					}
 					if(round>1)
 						row += '<td>'+d3.round(data[r][i],round)+'</td>';
 					else
