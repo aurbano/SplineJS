@@ -156,15 +156,18 @@
 		 * @return {Array} Matrix where each row i is the lagrange polynomial associated to x(i)
 		 */
 		lagrange_polynomials : function(x){
-			var m = x.length;
-			for(var i = 1; i<m; i++){
-				var ll=1;
+			var m = x.length,
+				c = [];
+				
+			for(var i = 0; i<m; i++){
+				var ll=[1];
 				for(var j=0;j<m;j++){
 					if(j==i) continue;
-					ll=conv(ll,[1 -x[j]])/(x[i]-x[j]);
+					ll = Spline.conv(ll,[1, -x[j]]).map(function(a) { return a / (x[i]-x[j]); });
 				}
-				lagrange_pols[i]=ll;   
+				c.push(ll.reverse());   
 			}
+			return c;
 		}
 	};
 	
@@ -267,8 +270,9 @@
 			m[l] = p;
 		},
 		_debug_printMat : function(A){
-			for(var i=0; i<A.length; i++)
+			for(var i=0; i<A.length; i++){
 				console.log(A[i]);
+			}
 		},
 		solve : function(A, x){	// in Matrix, out solutions
 			var m = A.length;
