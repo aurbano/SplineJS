@@ -149,6 +149,73 @@
 		return ret;
 	};
 	
+	Spline.interpolate = {
+		/**
+		 * Calculate the Lagrange polynomials for a set of x values
+		 * @param {Array} Points array [x1, x2,...]
+		 * @return {Array} Matrix where each row i is the lagrange polynomial associated to x(i)
+		 */
+		lagrange_polynomials : function(x){
+			var m = x.length;
+			for(var i = 1; i<m; i++){
+				var ll=1;
+				for(var j=0;j<m;j++){
+					if(j==i) continue;
+					ll=conv(ll,[1 -x[j]])/(x[i]-x[j]);
+				}
+				lagrange_pols[i]=ll;   
+			}
+		}
+	};
+	
+	/**
+	 * Convolution and polynomial multiplication
+	 * The resulting vector is length Math.max(A.length + B.length -1, Math.max(A.length, B.length))
+	 * If A and B are vectors of polynomial coefficients, convolving them is equivalent to multiplying the two
+	 * polynomials.
+	 * 
+	 * @author Alejandro U. Alvarez
+	 * @param {Array} Vector A
+	 * @param {Array} Vector B
+	 * @return {Array} Result vector 
+	 */
+	Spline.conv = function(a, b){
+		var m = Math.max(a.length, b.length),
+			c = [];
+			
+		var padA = Spline.zeros(b.length-1).concat(a.concat(Spline.zeros(b.length-1)));
+
+		for(var n=0; n<padA.length-1; n++){
+			var row = [];
+			for(var k=0; k<b.length; k++){
+				row.push(padA[n+k]*b[k]);
+			}
+			c.push(Spline.arraySum(row));
+		}
+		return c;
+	};
+	
+	/**
+	 * Create a vector of 0's of size n
+	 * @param {int} Vector size
+	 * @return {Array} Zeros vector
+	 */
+	Spline.zeros = function(n){
+		var v = [];
+		for(var i=0;i<n;i++) v.push(0);
+		return v;
+	};
+	
+	/**
+	 * Return the sum of the elements in the array.
+	 * Requires ECMAScript 5+
+	 * @param {Array} Array to sum
+	 * @return {int} Sum
+	 */
+	Spline.arraySum = function(array){
+		return array.reduce(function(a, b) { return a + b; }, 0);
+	};
+	
 	/**
 	 * Display data in tables 
 	 */
@@ -208,7 +275,9 @@
 			for(var k=0; k<m; k++){	// column
 				// pivot for column
 				var i_max = 0; var vali = Number.NEGATIVE_INFINITY;
-				for(var i=k; i<m; i++) if(A[i][k]>vali) { i_max = i; vali = A[i][k];}
+				for(var i=k; i<m; i++){
+					if(A[i][k]>vali) { i_max = i; vali = A[i][k]; }
+				}
 				Spline.gaussJ.swapRows(A, k, i_max);
 				
 				if(A[i_max][i] == 0) console.log("matrix is singular!");

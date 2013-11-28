@@ -53,6 +53,12 @@
 			};
 			
 			$(document).ready(function(){
+				var a = [1,2,3,4,5];
+				var b = [3,-1];
+				
+				var c = Spline.conv(a,b);
+				console.log(c);
+				
 				var data = [3, 6, 2, 7, 5, 2, 0, 3, 8, 9, 2, 5, 9, 3, 6, 3, 6, 2, 7, 5, 2, 1, 3, 8, 9, 2, 5, 9, 2, 7];
 				var x = Spline.linspace(0,30,data.length);
 				var graph = Spline.figure("#chart1", x);
