@@ -15,3 +15,5 @@ Test the project at http://github.urbanoalvarez.es/SplineJS/
 ------
 Developed by Alejandro U. Alvarez
 Released under the MIT License
+
+[![Analytics](https://ga-beacon.appspot.com/UA-3181088-16/splinejs/readme)](https://github.com/aurbano)
